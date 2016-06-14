@@ -1,0 +1,1 @@
+Sorry, /u/$user_from, but you cannot award karma to /u/$user_to as they are either a moderator of /r/$subreddit or they are not in good standing. If /u/$user_to is not in good standing, this person can message the moderators of /r/$subreddit at any time to resolve this issue. Until then this person cannot be assigned karma.

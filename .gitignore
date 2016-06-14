@@ -1,0 +1,6 @@
+run.py
+nohup.out
+responses/*
+!responses/SUBREDDIT_EXMPL/
+
+!.gitignore

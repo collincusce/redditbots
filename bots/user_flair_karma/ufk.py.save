@@ -1,0 +1,72 @@
+import praw, re, requests, bots.database
+from bots.bot import Bot
+
+class UFK(Bot):
+    def __init__(self, subreddit, username, password, automation, refresh_rate):
+	self.class_key = "UFK"
+        super(UFK, self).__init__(subreddit, username, password, automation, refresh_rate)
+
+    def check_comments(self):
+        comments = self.reddit.get_comments(self.subreddit, limit=200)
+        for comment in comments:
+            Comment.add(comment.id, self.db.session)
+            if not Comment.is_parsed(comment.id):
+                if comment.is_root:
+                    continue
+                parsed_request = self.parse_comment(comment)
+                if parsed_request['error'] is None:
+                    submission_id = parsed_request['submission_id']
+                    from_user = parsed_request['from_user']
+                    to_user = parsed_request['to_user']
+                    if not Award.already_awarded(submission_id, from_user, to_user):
+                        Award.add(submission_id, from_user, to_user)
+                        self.response('awarded', parsed_request)
+                    else:
+                        self.response('already_awarded', parsed_request)
+                else:
+
+    def parse_comment(self, comment):
+        parsed_request['error'] = None
+        parsed_request['submission_id'] = comment.submission.id
+        parsed_request['user_from'] = comment.author
+	if not comment.is_root:
+            parent_comment = self.reddit.get_info(thing_id = comment.parent_id)
+            parsed_request['user_to'] = parent_comment.author
+            if not self.verify_negotiation(parsed_request['user_from'],
+					 parsed_request['user_to'], comment):
+                parsed_request['error'] = "no_evidenece"
+        else:
+            parsed_request['error'] = "no_top_level"
+        return parsed_request
+
+    def verify_negotiation(self, user_from, user_to, comment):
+        current_comment = comment
+        response_list = []
+	while not current_comment.is_root:
+            current_comment = self.reddit.get_info(thing_id = current_comment.parent_id)
+            response_list.append(current_comment.author)
+        if current_comment.submission.author != user_from:
+            response_list.append(user_from)
+                    
+class Award(Database.Base):
+    __tablename__ = 'awards'
+    submission_id = Column(String)
+    from_user = Column(String)
+    to_user = Column(String)
+    
+    def __init__(self, submission_id, from_user, to_user):
+        self.submission_id = submission_id
+        self.from_user = from_user
+        self.to_user = to_user
+
+    @staticmethod
+    def add(submission_id, from_user, to_user):
+        session.add(Award(submission_id, from_user, to_user))
+        session.commit()
+
+    @staticmethod
+    def already_awarded(submission_id, from_user, to_user):
+        return Award.query.filter(Award.submission_id == submission_id,
+                                  Award.from_user == from_user,
+                                  Award.to_user == to_user).count() > 0
+
