@@ -25,9 +25,10 @@ The bot may run on as many subreddits as you like simultaneously.
 This guide assumes a Ubuntu 14.04 Linux machine with python 2.7 installed on it. 
 
 1. sudo apt-get install git
-2. cd <directory you wish to hold the bot>
-3. git clone <url to this repository>
-4. pip install -r requirements.txt
+2. sudo apt-get install sqlite3 libsqlite3-dev
+3. cd <directory you wish to hold the bot>
+4. git clone <url to this repository>
+5. pip install -r requirements.txt
 
 Now that it's installed, in order to run it you will need the following (assuming you own/mod the subreddit):
 
@@ -45,6 +46,8 @@ Now that it's installed, in order to run it you will need the following (assumin
     * list of tiered flair classes and their karma thresholds
 
 Place that info into your run.py
+
+Next, copy the `responses/SUBREDDIT_EXMPL` directory to `responses/yoursubreddit` where "yoursubreddit" is the name of the subreddit you're using this bot on. Do this for each subreddit that's going to use the bot. You may got through the templates for the responses and modify them to your needs, but generic responses are in place and should be sufficient.
 
 The last step is to run the code!
 
