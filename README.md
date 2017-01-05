@@ -59,13 +59,3 @@ This will run the process in the background and assign karma to users as they co
 
 That's it! Any issues, file a ticket with this repository.
 
-## Note
-
-Whenever you restart the bot, you must also delete the existing database for the subreddits. These can be found in the `db/` folder.
-
-Another note, it is known that when you restart the bot, double karma will be assigned. This is because we must remove the existing databases. It is a bug, but one that is not fixed yet. 
-
-# Bugs / TODO
-
-1. Graceful shut down and restart, preventing the issue in the Note above from occuring.
-2. Per-bot configs, allowing for automatic pickup of new subreddits (removing the need for a restart)
