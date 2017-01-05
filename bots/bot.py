@@ -1,12 +1,14 @@
 import praw, time, os, database, sys, traceback
 
 class Bot(object):
-    def __init__(self,subreddit, username, password, refresh_rate, dbroot):
+    def __init__(self,subreddit, username, password, client_id, client_secret, refresh_rate, dbroot):
         if not hasattr(self, 'class_key'):
             self.class_key = 'default'
         self.subreddit = subreddit
         self.username = username
         self.password = password
+        self.client_id = client_id
+        self.client_secret = client_secret
 	self.subreddit = subreddit
         self.dbpath = dbroot + '/' + self.subreddit
         self.dblocation = self.dbpath + '/' + self.class_key + '.db'
@@ -22,9 +24,11 @@ class Bot(object):
     def login(self):
         if self.reddit is not None:
             self.reddit = None
-        self.reddit = praw.Reddit(user_agent = "Karma monster for " + self.subreddit)
-        self.reddit.login(self.username, self.password, disable_warning=True)
-        self.home = self.reddit.get_subreddit(self.subreddit)
+        self.reddit = praw.Reddit(client_id = self.client_id, client_secret = self.client_secret,
+            username = self.username, password = self.password,
+            user_agent = "Karma monster for " + self.subreddit)
+        #self.reddit.login(self.username, self.password, disable_warning=True)
+        self.home = self.reddit.subreddit(self.subreddit)
 
     def run(self):
         if self.reddit is None:

@@ -4,16 +4,16 @@ from bots.database import Database, Comment, Submission
 from bots.bot import Bot
 
 class UFK(Bot):
-    def __init__(self, subreddit, username, password, refresh_rate, dbroot, response_root, css_class, css_ignores, bonus_css):
+    def __init__(self, subreddit, username, password, client_id, client_secret, refresh_rate, dbroot, response_root, css_class, css_ignores, bonus_css):
         self.class_key = "UFK"
         self.css_class = css_class
         self.css_ignores = css_ignores
         self.bonus_css = bonus_css
         self.response_root = response_root
-        super(UFK, self).__init__(subreddit, username, password, refresh_rate, dbroot)
+        super(UFK, self).__init__(subreddit, username, password, client_id, client_secret, refresh_rate, dbroot)
 
     def check_comments(self):
-        comments = self.reddit.get_comments(self.subreddit, limit=200)
+        comments = self.home.comments(limit=200)
         for comment in comments:
             if not Comment.is_parsed(comment.id) and comment.author:
                 can_award = False
@@ -41,7 +41,7 @@ class UFK(Bot):
                     Award.add(comment.submission.id, user_from, user_to, self.db.session)
 
     def add_karma(self, user):
-        flair = self.home.get_flair(user)
+        flair = self.home.flair(redditor=user).next()
         if flair and flair['flair_text']:
             foundnum = re.findall(r'\d+', flair['flair_text'])
             if isinstance(foundnum, list) and len(foundnum) > 0:
@@ -60,7 +60,7 @@ class UFK(Bot):
             flair_css = str(self.css_class + " " + bcss).strip()
         else:
             return False
-        self.home.set_flair(user, flair_text, flair_css)
+        self.home.flair.set(redditor=user, text=flair_text, css_class=flair_css)
         return True
 
     def check_command(self, comment):
@@ -75,7 +75,7 @@ class UFK(Bot):
         parsed_request['user_from'] = comment.author
         parsed_request['subreddit'] = self.subreddit
         if not comment.is_root:
-            parent_comment = self.reddit.get_info(thing_id = comment.parent_id)
+            parent_comment = comment.parent()
             parsed_request['user_to'] = parent_comment.author
             if not self.verify_negotiation(parsed_request['user_from'],
                                         parsed_request['user_to'], comment, parent_comment):
@@ -91,15 +91,17 @@ class UFK(Bot):
         found_from = False
         found_to = False
         post_list = []
-        pc = self.reddit.get_submission(parent_comment.permalink).comments[0]
+        pc = parent_comment.submission.comments[0]
+        submission_author_name = current_comment.submission.author.name
+        print(submission_author_name)
         namelist = [x.author.name for x in pc.replies if x.author is not None and x.id != comment.id and x.author.name == user_from.name and not self.check_command(x)]
         if user_from.name in namelist:
             post_list.append(user_from.name)
         while not current_comment.is_root:
-            current_comment = self.reddit.get_info(thing_id = current_comment.parent_id)
+            current_comment = current_comment.parent()
             if current_comment.author is not None:
                 post_list.append(current_comment.author.name)
-        post_list.append(comment.submission.author.name)
+        post_list.append(submission_author_name)
         if len(post_list) > 1 and user_to and user_from and hasattr( user_to, "name") and hasattr(user_from, "name"):
             pl = list(reversed(post_list))
             for n in range(len(post_list)):
