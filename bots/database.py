@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.exc import IntegrityError, InvalidRequestError
 
 class Database():
     Base = declarative_base()
@@ -21,8 +22,13 @@ class Comment(Database.Base):
 
     @staticmethod
     def add(id, session):
-        session.add(Comment(id))
-        session.commit()
+        try:
+            session.merge(Comment(id))
+            session.commit()
+        except (IntegrityError, InvalidRequestError):
+            pass
+        except:
+            raise
 
     @staticmethod
     def is_parsed(id):
@@ -37,8 +43,13 @@ class Submission(Database.Base):
 
     @staticmethod
     def add(id, session):
-        session.add(Submission(id))
-        session.commit()
+        try:
+            session.merge(Submission(id))
+            session.commit()
+        except (IntegrityError, InvalidRequestError):
+            pass
+        except:
+            raise
 
     @staticmethod
     def is_parsed(id):

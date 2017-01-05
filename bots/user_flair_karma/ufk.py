@@ -13,7 +13,7 @@ class UFK(Bot):
         super(UFK, self).__init__(subreddit, username, password, client_id, client_secret, refresh_rate, dbroot)
 
     def check_comments(self):
-        comments = self.home.comments(limit=200)
+        comments = self.home.comments(limit=500)
         for comment in comments:
             if not Comment.is_parsed(comment.id) and comment.author:
                 can_award = False
@@ -92,8 +92,7 @@ class UFK(Bot):
         found_to = False
         post_list = []
         pc = parent_comment.submission.comments[0]
-        submission_author_name = current_comment.submission.author.name
-        print(submission_author_name)
+        submission_author_name = "spez" if current_comment.submission.author is None else current_comment.submission.author.name
         namelist = [x.author.name for x in pc.replies if x.author is not None and x.id != comment.id and x.author.name == user_from.name and not self.check_command(x)]
         if user_from.name in namelist:
             post_list.append(user_from.name)
@@ -134,8 +133,11 @@ class Award(Database.Base):
     
     @staticmethod
     def add(submission_id, user_from, user_to, session):
-        session.add(Award(submission_id, user_from, user_to))
-        session.commit()
+        try:
+            session.merge(Award(submission_id, user_from, user_to))
+            session.commit()
+        except:
+            raise
 
     @staticmethod
     def already_awarded(submission_id, user_from, user_to):

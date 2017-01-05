@@ -36,6 +36,8 @@ Now that it's installed, in order to run it you will need the following (assumin
     * This account will write responses and assign karma flair. 
     * Ensure permissions are appropriate for that work.
     * Must have password
+    * Must have a client_id and client_secret from here: https://www.reddit.com/prefs/apps
+    * client_id and client_secret can be on one account, but you **must add the bot users as developers**
 2. A run.py script. 
     * You may copy the run_example.py found in the code.
     * You may also create your own.
