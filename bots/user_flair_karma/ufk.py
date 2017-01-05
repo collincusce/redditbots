@@ -13,7 +13,7 @@ class UFK(Bot):
         super(UFK, self).__init__(subreddit, username, password, client_id, client_secret, refresh_rate, dbroot)
 
     def check_comments(self):
-        comments = self.home.comments(limit=500)
+        comments = self.home.comments(limit=200)
         for comment in comments:
             if not Comment.is_parsed(comment.id) and comment.author:
                 can_award = False
