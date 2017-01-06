@@ -15,7 +15,7 @@ class UFK(Bot):
     def check_comments(self):
         comments = self.home.comments(limit=200)
         for comment in comments:
-            if not Comment.is_parsed(comment.id) and comment.author:
+            if not Comment.is_parsed(comment.id, self.db.session) and comment.author:
                 can_award = False
                 user_from = comment.author
                 if self.check_command(comment):
@@ -119,6 +119,7 @@ class UFK(Bot):
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.exc import IntegrityError
 
 class Award(Database.Base):
     __tablename__ = 'awards'
@@ -134,10 +135,11 @@ class Award(Database.Base):
     @staticmethod
     def add(submission_id, user_from, user_to, session):
         try:
-            session.merge(Award(submission_id, user_from, user_to))
+            session.add(Award(submission_id, user_from, user_to))
             session.commit()
         except:
             raise
+            
 
     @staticmethod
     def already_awarded(submission_id, user_from, user_to):

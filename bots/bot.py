@@ -54,10 +54,18 @@ class Bot(object):
                 exc_type, exc_obj, tb = sys.exc_info()
                 print self.subreddit + "__" + self.class_key + " - LINE " + str(tb.tb_lineno) + " - Error checking messages: {0}".format(emsg)
                 print traceback.format_exc()
+            try:
+                self.check_flair()
+            except Exception as emsg:
+                exc_type, exc_obj, tb = sys.exc_info()
+                print self.subreddit + "__" + self.class_key + " - LINE " + str(tb.tb_lineno) + " - Error checking flair: {0}".format(emsg)
+                print traceback.format_exc()
             
     def check_comments(self):
         pass
     def check_submissions(self):
         pass
     def check_messages(self):
+        pass
+    def check_flair(self):
         pass

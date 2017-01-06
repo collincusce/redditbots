@@ -23,16 +23,14 @@ class Comment(Database.Base):
     @staticmethod
     def add(id, session):
         try:
-            session.merge(Comment(id))
+            session.add(Comment(id))
             session.commit()
-        except (IntegrityError, InvalidRequestError):
-            pass
         except:
             raise
 
     @staticmethod
-    def is_parsed(id):
-        return Comment.query.filter(Comment.id == id).count() > 0
+    def is_parsed(id, session):
+        return False if session.query(Comment).filter(Comment.id == id).first() is None else True
 
 class Submission(Database.Base):
     __tablename__ = 'submissions'
@@ -44,13 +42,11 @@ class Submission(Database.Base):
     @staticmethod
     def add(id, session):
         try:
-            session.merge(Submission(id))
+            session.add(Submission(id))
             session.commit()
-        except (IntegrityError, InvalidRequestError):
-            pass
         except:
             raise
 
     @staticmethod
-    def is_parsed(id):
-        return Submission.query.filter(Submission.id == id).count() > 0
+    def is_parsed(id, session):
+        return False if session.query(Submission).filter(Submission.id == id).first() is None else True
