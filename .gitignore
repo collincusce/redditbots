@@ -1,6 +1,10 @@
 run.py
+run_flair.py
 nohup.out
+backup_flair.py
+flair_backups
 *.pyc
+*.save
 responses/*
 !responses/SUBREDDIT_EXMPL/
 
