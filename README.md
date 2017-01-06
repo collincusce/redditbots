@@ -1,6 +1,10 @@
 # reddit-bot
 
-Bot which automatically scans user comments and awards karma when other users indicate they'd like to give them some karma. Updates their user flair to display this karma. Has multiple tiers of Karma flair.
+There's actually two bots in this repository: User Flair Karma (UFK) and Flair Karma Sync (FKS). UFK allows users to assign each other karma with people they've had conversations with. FKS synchronises flair between subreddits given any synchronisation algiorithm you provide.
+
+#User Flair Karma (UFK)
+
+UFK is a bot which automatically scans user comments and awards karma when other users indicate they'd like to give them some karma. It updates their user flair to display this karma. It supports any multiple tiers of Karma flair, custom to your liking.
 
 ## How does it work?
 
@@ -20,7 +24,19 @@ ex: [("tier2", 15),("tier3", 50),("tier4", 100),("tier5",250),("tier6",500)]
 
 The bot may run on as many subreddits as you like simultaneously. 
 
-## Getting started
+#Flair Karma Sync (FKS)
+
+FKS is a bot which syncronises flair across several subreddits given any criteria provided. In the case of a Karma Sync, a special function has already been provided in run_examples.py which shows how this can be done. You can configure any number of subreddits to sync and can create any sync rules you want. All subreddits must obey the same synchronization rules, however.
+
+## How does it work?
+
+The bot requires a user that can access all subreddits in question. This user finds all flair differences between these subreddits, applies the rules you provide in the form of a custom function, and synchronises them in the way your rules function specifies. 
+
+The input "syncfunc" is a user-defined function that takes as input a dictionary whose keys are subreddit names and whose values are a dictionary with 'text' and 'css_class' as keys. This represents the data for one user. The intent of the sync function is to return a similar dictionary keyed by subreddit but with the values being the final state for the user's flair on the subreddits. To assist in this, the syncfunc also takes a second parameter which is a list of all subreddit names, as some subreddits may not have flair data in them yet and will require new flair to be created.
+
+The input "syncsubs" is a user-defined list of subreddits you wish to synchronise in addition to the one already provided to the bot. **There is no reason to add the subreddit that the bot already knows about to this list.** This list of subreddits must also have the assigned bot user as a moderator for the flair to synchronize. 
+
+# Getting started
 
 This guide assumes a Ubuntu 14.04 Linux machine with python 2.7 installed on it. 
 
@@ -38,6 +54,7 @@ Now that it's installed, in order to run it you will need the following (assumin
     * Must have password
     * Must have a client_id and client_secret from here: https://www.reddit.com/prefs/apps
     * client_id and client_secret can be on one account, but you **must add the bot users as developers**
+    * If you wish to use FKS, the user account must share moderator privileges with the other subreddits.
 2. A run.py script. 
     * You may copy the run_example.py found in the code.
     * You may also create your own.
