@@ -138,6 +138,7 @@ class Award(Database.Base):
             session.add(Award(submission_id, user_from, user_to))
             session.commit()
         except:
+            session.rollback()
             raise
             
 

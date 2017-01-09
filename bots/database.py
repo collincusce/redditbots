@@ -26,6 +26,7 @@ class Comment(Database.Base):
             session.add(Comment(id))
             session.commit()
         except:
+            session.rollback()
             raise
 
     @staticmethod
@@ -45,6 +46,7 @@ class Submission(Database.Base):
             session.add(Submission(id))
             session.commit()
         except:
+            session.rollback()
             raise
 
     @staticmethod
