@@ -22,7 +22,7 @@ class UFK(Bot):
                     parsed_request = self.parse_comment(comment)
                     if parsed_request['error'] is None:
                         user_to = parsed_request['user_to']
-                        if not Award.already_awarded(comment.submission.id, user_from, user_to):
+                        if not Award.already_awarded(comment.submission.id, user_from, user_to, self.db.session):
                             can_award = self.add_karma(user_to)
                             if can_award:
                                 if user_to.name == self.username:
@@ -143,9 +143,7 @@ class Award(Database.Base):
             
 
     @staticmethod
-    def already_awarded(submission_id, user_from, user_to):
-        return Award.query.filter(Award.submission_id == submission_id,
-                                    Award.user_from == user_from.name,
-                                    Award.user_to == user_to.name).count() > 0
+    def already_awarded(submission_id, user_from, user_to, session):
+        return False if session.query(Award).filter(Award.submission_id == submission_id, Award.user_from == user_from.name, Award.user_to == user_to.name).first() is None else True
 
 
