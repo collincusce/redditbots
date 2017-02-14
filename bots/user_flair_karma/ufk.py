@@ -93,6 +93,8 @@ class UFK(Bot):
         post_list = []
         pc = parent_comment.submission.comments[0]
         submission_author_name = "spez" if current_comment.submission.author is None else current_comment.submission.author.name
+        if submission_author_name == user_from.name and submission_author_name != user_to.name and not self.check_command(parent_comment):
+            return True #the OP can send to anyone
         namelist = [x.author.name for x in pc.replies if x.author is not None and x.id != comment.id and x.author.name == user_from.name and not self.check_command(x)]
         if user_from.name in namelist:
             post_list.append(user_from.name)
