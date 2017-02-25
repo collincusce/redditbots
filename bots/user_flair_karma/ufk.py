@@ -64,7 +64,7 @@ class UFK(Bot):
         return True
 
     def check_command(self, comment):
-        if comment.body.lower().strip() == "+karma":
+        if comment.body.lower().strip().startswith("+karma"):
             return True
         return False
 

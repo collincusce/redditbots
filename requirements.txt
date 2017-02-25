@@ -21,7 +21,7 @@ ndg-httpsclient==0.3.3
 oauth==1.0.1
 PAM==0.4.2
 pipreqs==0.4.6
-praw==4.3.0
+praw==4.4.0
 prawcore==0.7.0
 prettytable==0.7.2
 pyasn1==0.1.9
