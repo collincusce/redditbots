@@ -2,7 +2,7 @@
 
 There's actually two bots in this repository: User Flair Karma (UFK) and Flair Karma Sync (FKS). UFK allows users to assign each other karma with people they've had conversations with. FKS synchronises flair between subreddits given any synchronisation algiorithm you provide.
 
-#User Flair Karma (UFK)
+# User Flair Karma (UFK)
 
 UFK is a bot which automatically scans user comments and awards karma when other users indicate they'd like to give them some karma. It updates their user flair to display this karma. It supports any multiple tiers of Karma flair, custom to your liking.
 
