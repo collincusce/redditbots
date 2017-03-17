@@ -24,7 +24,7 @@ ex: [("tier2", 15),("tier3", 50),("tier4", 100),("tier5",250),("tier6",500)]
 
 The bot may run on as many subreddits as you like simultaneously. 
 
-#Flair Karma Sync (FKS)
+# Flair Karma Sync (FKS)
 
 FKS is a bot which syncronises flair across several subreddits given any criteria provided. In the case of a Karma Sync, a special function has already been provided in run_examples.py which shows how this can be done. You can configure any number of subreddits to sync and can create any sync rules you want. All subreddits must obey the same synchronization rules, however.
 
