@@ -77,7 +77,7 @@ class UFK(Bot):
         if not comment.is_root:
             parent_comment = comment.parent()
             parsed_request['user_to'] = parent_comment.author
-            if not self.verify_negotiation(parsed_request['user_from'],
+            if parsed_request['user_from'] is None or parsed_request['user_to'] is None or not self.verify_negotiation(parsed_request['user_from'],
                                         parsed_request['user_to'], comment, parent_comment):
                 parsed_request['error'] = "no_evidence"
             if comment.author == parent_comment.author:

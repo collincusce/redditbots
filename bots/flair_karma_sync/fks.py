@@ -20,7 +20,7 @@ class FKS(Bot):
             for f in flairs:
                 if f['user'] not in users_by_sub:
                     users_by_sub[f['user']] = {}
-                users_by_sub[f['user']][sub] = {'css_class': f['flair_css_class'], 'text':f['flair_text']}
+                users_by_sub[f['user']][sub] = {'css_class': unicode(f.get('flair_css_class') or ''), 'text': unicode(f.get('flair_text') or '')}
         for u in users_by_sub:
             results_by_sub[u] = self.syncfunc(users_by_sub[u], allsubs)
         for u in results_by_sub:

@@ -1,1 +1,1 @@
-Sorry, /u/$user_from, but we do not see any evidence that the trade occured. The user you're awarding karma to must have had a conversation with you in this thread. We do this to prevent people from giving karma without any trading occuring. 
+Sorry, /u/$user_from, but we do not see any evidence that the trade occurred. The user you're awarding karma to must have had a conversation with you in this thread. We do this to prevent people from giving karma without any trading occurring. 
