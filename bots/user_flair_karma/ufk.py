@@ -1,4 +1,5 @@
 import praw, re, requests
+from praw.models import MoreComments
 from string import Template
 from bots.database import Database, Comment, Submission
 from bots.bot import Bot
@@ -15,6 +16,8 @@ class UFK(Bot):
     def check_comments(self):
         comments = self.home.comments(limit=200)
         for comment in comments:
+            if isinstance(comment, MoreComments):
+                continue
             if not Comment.is_parsed(comment.id, self.db.session) and comment.author:
                 can_award = False
                 user_from = comment.author
@@ -95,7 +98,12 @@ class UFK(Bot):
         submission_author_name = "spez" if current_comment.submission.author is None else current_comment.submission.author.name
         if submission_author_name == user_from.name and submission_author_name != user_to.name and not self.check_command(parent_comment):
             return True #the OP can send to anyone
-        namelist = [x.author.name for x in pc.replies if x.author is not None and x.id != comment.id and x.author.name == user_from.name and not self.check_command(x)]
+        parent_comment.submission.comments.replace_more(limit=None)
+        namelist = []
+        for cmnt in parent_comment.submission.comments.list():
+            if cmnt.author is not None and cmnt.id != comment.id and cmnt.author.name == user_from.name and not self.check_command(cmnt):
+                namelist.append(cmnt.author.name)
+        #namelist = [x.author.name for x in pc.replies if x.author is not None and x.id != comment.id and x.author.name == user_from.name and not self.check_command(x)]
         if user_from.name in namelist:
             post_list.append(user_from.name)
         while not current_comment.is_root:
