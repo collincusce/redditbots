@@ -64,7 +64,7 @@ class UFK(Bot):
         return True
 
     def check_command(self, comment):
-        if comment.body.lower().strip().startswith("+karma"):
+        if comment.body.lower().strip().startswith(("+karma", "\\+karma")):
             return True
         return False
 
@@ -116,7 +116,10 @@ class UFK(Bot):
         filein = open(self.response_root + "/" + key + ".tpl")
         src = Template( filein.read() )
         txt = src.substitute(parsed_request)
-        comment.reply(txt)
+        try:
+            comment.reply(txt)
+        except Exception as ex:
+            print("UFK Error: " + self.subreddit + " - " + comment.id + " - " + comment.permalink + "\n\t" + str(ex))
 
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import scoped_session, sessionmaker
