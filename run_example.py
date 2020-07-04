@@ -8,9 +8,10 @@ def karmasync(subdict, allsubs):
     maxsub = ""
     results = subdict.copy()
     ignore_classes = ['red', 'mod']
+    ignore_subs = dict()
     for s,f in subdict.iteritems():
         if not set(ignore_classes).isdisjoint(f['css_class'].strip().split()):
-            return results
+            ignore_subs[s] = True
         num = 0
         if f['text'] and f['text'].strip():
             foundnum = re.findall(r'\d+', f['text'].strip())
@@ -24,7 +25,7 @@ def karmasync(subdict, allsubs):
     for s in allsubs:
         if s not in results:
             results[s] = {'text':'','css_class':''}
-        if not maxnum or (results[s]['text'] == subdict[maxsub]['text'] and results[s]['css_class'] == subdict[maxsub]['css_class']):
+        if s in ignore_subs or not maxnum or (results[s]['text'] == subdict[maxsub]['text'] and results[s]['css_class'] == subdict[maxsub]['css_class']):
             results.pop(s)
         else:
             results[s]['text'] = subdict[maxsub]['text']
