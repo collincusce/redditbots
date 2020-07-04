@@ -12,6 +12,7 @@ def karmasync(subdict, allsubs):
     for s,f in subdict.iteritems():
         if not set(ignore_classes).isdisjoint(f['css_class'].strip().split()):
             ignore_subs[s] = True
+            continue
         num = 0
         if f['text'] and f['text'].strip():
             foundnum = re.findall(r'\d+', f['text'].strip())
