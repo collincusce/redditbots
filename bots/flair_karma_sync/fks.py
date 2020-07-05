@@ -4,10 +4,13 @@ from bots.database import Database, Comment, Submission
 from bots.bot import Bot
 
 class FKS(Bot):
-    def __init__(self, subreddit, username, password, client_id, client_secret, refresh_rate, dbroot, syncfunc, syncsubs):
+    def __init__(self, subreddit, username, password, client_id, client_secret, refresh_rate, dbroot, syncfunc, syncsubs, baseclass, ignore_classes, karma_tiers):
         self.class_key = "FKS"
         self.syncfunc = syncfunc
         self.syncsubs = syncsubs
+        self.baseclass = baseclass
+        self.ignore_classes = ignore_classes
+        self.karma_tiers = karma_tiers
         super(FKS, self).__init__(subreddit, username, password, client_id, client_secret, refresh_rate, dbroot)
 
     def check_flair(self):
@@ -22,7 +25,7 @@ class FKS(Bot):
                     users_by_sub[f['user']] = {}
                 users_by_sub[f['user']][sub] = {'css_class': unicode(f.get('flair_css_class') or ''), 'text': unicode(f.get('flair_text') or '')}
         for u in users_by_sub:
-            results_by_sub[u] = self.syncfunc(users_by_sub[u], allsubs)
+            results_by_sub[u] = self.syncfunc(users_by_sub[u], allsubs, self.baseclass, self.ignore_classes, self.karma_tiers)
         for u in results_by_sub:
             for sub in results_by_sub[u]:
                 t = results_by_sub[u][sub]['text']
