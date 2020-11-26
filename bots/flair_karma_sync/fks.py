@@ -23,11 +23,11 @@ class FKS(Bot):
             for f in flairs:
                 if f['user'] not in users_by_sub:
                     users_by_sub[f['user']] = {}
-                users_by_sub[f['user']][sub] = {'css_class': unicode(f.get('flair_css_class') or ''), 'text': unicode(f.get('flair_text') or '')}
+                users_by_sub[f['user']][sub] = {'css_class': unicode(f.get('flair_css_class') or ''), 'text': unicode(f.get('flair_text') or '').strip()}
         for u in users_by_sub:
             results_by_sub[u] = self.syncfunc(users_by_sub[u], allsubs, self.baseclass, self.ignore_classes, self.karma_tiers)
         for u in results_by_sub:
             for sub in results_by_sub[u]:
                 t = results_by_sub[u][sub]['text']
                 c = results_by_sub[u][sub]['css_class']
-                self.reddit.subreddit(sub).flair.set(redditor = u, text = t, css_class = c )
+                self.reddit.subreddit(sub).flair.set(redditor = u, text = t.strip(), css_class = c.strip() )

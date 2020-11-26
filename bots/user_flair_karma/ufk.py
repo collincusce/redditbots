@@ -63,7 +63,7 @@ class UFK(Bot):
             flair_css = str(self.css_class + " " + bcss).strip()
         else:
             return False
-        self.home.flair.set(redditor=user, text=flair_text, css_class=flair_css)
+        self.home.flair.set(redditor=user, text=flair_text.strip(), css_class=flair_css.strip())
         return True
 
     def check_command(self, comment):
