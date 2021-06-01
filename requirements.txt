@@ -41,7 +41,7 @@ Twisted-Core==13.2.0
 Twisted-Names==13.2.0
 Twisted-Web==13.2.0
 update-checker==0.16
-urllib3==1.24.3
+urllib3==1.26.5
 websocket-client==0.56.0
 yarg==0.1.9
 zope.interface==4.0.5
